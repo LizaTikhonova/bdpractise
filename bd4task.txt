@@ -1,0 +1,17 @@
+Список больших стран в бд (площадью от 1 миллиона км^2):
+SELECT country, area FROM countries WHERE area >= 1000000 ORDER BY area DESC;
+
+Топ 3 стран с наименьшим количеством населения;
+SELECT country, population FROM countries ORDER BY population ASC limit 3;
+
+Топ 5 стран по плотности населения в бд:
+SELECT country, (population/area) AS population_density FROM countries ORDER BY population/area DESC limit 5;
+
+Страна с самым большим рейтингом качества жизни людей:
+SELECT countries.country, additional_information_2.hdi FROM countries LEFT JOIN additional_information_2 ON (countries.id = additional_information_2.country_id) ORDER BY additional_information_2.hdi DESC limit 1;
+
+Cписок федеративных государств:
+SELECT countries.country, countries.capital, (federal_state.name) AS administrative_division FROM countries JOIN (SELECT additional_information.country_id, administrative_division.name FROM additional_information RIGHT JOIN administrative_division ON (additional_information.administrative_division_id = administrative_division.id) WHERE administrative_division.id = 2) AS federal_state USING (country_id);
+
+Список стран, в которых население разговаривает на мирандском языке;
+SELECT countries.country, countries.population, (miranda.name) AS language FROM countries JOIN (SELECT language_in_country.country_id, languages.name FROM language_in_country RIGHT JOIN languages ON (languages.id = language_in_country.language_id) WHERE language_id = 2) AS miranda USING (country_id);
